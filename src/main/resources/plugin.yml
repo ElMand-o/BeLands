@@ -1,0 +1,29 @@
+name: BeLands
+version: '1.1-SNAPSHOT'
+main: ir.elmando.beLands.BeLands
+api-version: '1.21'
+authors: [ElMando]
+depend: [Vault, GriefPrevention]
+softdepend: [PlaceholderAPI]
+description: A cool plugin
+
+commands:
+  land:
+    description: Main land/claim command
+    usage: /land <subcommand>
+    aliases: [lands, claim]
+
+  startp:
+    description: Sets the first corner of your land
+    usage: /startp
+    aliases: [startpoint]
+
+  endp:
+    description: Sets the second corner of your land
+    usage: /endp
+    aliases: [endpoint]
+
+  help:
+    description: Shows land command help
+    usage: /land help
+    aliases: [h]

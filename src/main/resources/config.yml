@@ -1,0 +1,89 @@
+# ================================================================
+#                       BeLands - Bedrock Edition Lands
+# ================================================================
+#
+# Developed by: ElMand_o
+# Description:
+#   BeLands is a Minecraft Java plugin inspired by PMMP's EconomyLand.
+#   It connects with Vault, GriefPrevention, and Floodgate to simulate
+#   PocketMine-MP style lands and economy on your Java server.
+#
+# Features:
+#   - Land claiming & protection via GriefPrevention
+#   - Economy integration through Vault
+#   - Floodgate support for Bedrock players
+#   - PMMP Lands-like experience on Java edition servers
+#
+# Resources & Contact:
+#   GitHub: https://github.com/ElMand-o
+#   Telegram: @Epic_scammer
+#   Rubika: EpicScammer
+#
+# Thank you for using BeLands! ❤️
+# Feel free to report issues, suggest features, or contribute.
+#
+# ================================================================
+
+economy:
+  buy_price: 100
+  sell_price: 90
+
+settings:
+  min_claim_blocks: 20
+
+messages:
+  prefix: "<gold>[BeLands]</gold> "
+
+  no_permission: "<red>You don't have permission to do this.</red>"
+  only_players: "<red>Only players can use this command.</red>"
+  error: "<red>An error occurred: {error}</red>"
+
+  config_reloaded: "<green>Successfully reloaded config</green>"
+
+  land:
+    bought: "<green>You bought the land for <yellow>${price}</yellow> coins!</green>"
+    sold: "<red>You sold your land for <yellow>${price}</yellow> coins!</red>"
+    info: "<aqua>This land belongs to <yellow>{owner}</yellow>. ID: <yellow>{claimId}</yellow></aqua>"
+    no_info: "<red>This is not a land</red>"
+    teleport: "<green>Teleporting you to land</green> <yellow>{claimId}</yellow>"
+    not_owner: "<red>You don't own this land.</red>"
+    already_owned: "<red>You already own this land.</red>"
+    not_enough_money: "<red>You don't have enough coins. Required: <yellow>${price}</yellow></red>"
+    how_much: "<gold>To buy this selection you must have</gold> <green>${price}</green>, <gold>use</gold> <green>/land buy</green> <gold>to confirm</gold>"
+    min_size: "<red>Your claim is too small. Minimum land size is <yellow>{min_blocks}</yellow> blocks.</red>"
+    max_size: "<red>Your claim is too big. Maximum land size is <yellow>{max_blocks}</yellow> blocks.</red>"
+    overlap: "<red>Your claim overlaps with another land!</red>"
+    price: |-
+      <green>Your land:</green>
+      <green>ID</green>: <yellow>{claimId}</yellow>
+      <green>Buy</green>: <yellow>${buy_price}</yellow>
+      <green>Sell</green>: <yellow>${sell_price}</yellow>
+    none: "<red>You have zero lands... poor guy :(</red>"
+
+    trust:
+      success: "<green>You have trusted <yellow>{player}</yellow> on your land.</green>"
+      already_trusted: "<red><yellow>{player}</yellow> is already trusted.</red>"
+      removed: "<yellow>{player}</yellow> <green>is no longer trusted on your land.</green>"
+      not_owner: "<red>You cannot trust players on land you don't own.</red>"
+      not_trusted: "<red><yellow>{player}</yellow> is not trusted on this land.</red>"
+
+      # Target messages
+      granted_to_target: "<green>Player <yellow>{owner}</yellow> gave you access to land <yellow>{claimId}</yellow>.</green>"
+      removed_from_target: "<red>Player <yellow>{owner}</yellow> removed your access from land <yellow>{claimId}</yellow>.</red>"
+
+    transfer:
+      success: "<green>You transferred ownership of claim <yellow>{claimId}</yellow> to <yellow>{player}</yellow>.</green>"
+      not_owner: "<red>You cannot transfer land you don't own.</red>"
+      player_not_found: "<red>Player <yellow>{player}</yellow> not found.</red>"
+
+      # Target message for transfer
+      received_transfer: "<green>Player <yellow>{owner}</yellow> transferred ownership of land <yellow>{claimId}</yellow> to you.</green>"
+
+
+  selection:
+    first_position_set: "<green>First position set to</green> <gold>{pos}</gold>"
+    second_position_set: "<green>Second position set to</green> <gold>{pos}</gold>"
+    cleared: "<yellow>Selection cleared.</yellow>"
+    too_small: "<red>Your selection is too small. Minimum claim size: <yellow>{min}</yellow> blocks.</red>"
+    too_large: "<red>Your selection is too large. Maximum claim size: <yellow>{max}</yellow> blocks.</red>"
+    confirm: "<gold>Use <green>/land buy</green> to purchase this selection for <yellow>${price}</yellow> coins.</gold>"

@@ -26,18 +26,19 @@ This ensures both new and veteran players can easily buy, sell, and manage land 
 
 | Command | Description |
 |---------|-------------|
-| `/land trust <player> <claim_id>` | Grant access to your land/claim |
-| `/land untrust <player> <claim_id>` | Revoke a player's access |
+| `/land invite <claim_id> <player>` | Grant access to your land/claim |
+| `/land kick <claim_id> <player>` | Revoke a player's access |
 | `/land here` | Show land info at your current spot |
 | `/land move <id>` | Teleport to a claim you own |
 | `/startp` | Set the first corner of a claim |
 | `/endp` | Set the second corner of a claim |
 | `/land debug` | View your start/end positions |
-| `/land buy` | Purchase the currently selected land |
-| `/land sell <land_id>` | Sell one of your lands |
-| `/land transfer <player> <claim_id>` | Transfer claim ownership |
+| `/landbuy` | Purchase the currently selected land |
+| `/landsell <land_id>` | Sell one of your lands |
+| `/land transfer <claim_id> <player>` | Transfer claim ownership |
 | `/land price <claim_id>` | Check buy/sell price of a claim |
-| `/land claims` | List all your claim IDs |
+| `/land whose` | List all your claim IDs |
+| `/land list` | List all claim IDs |
 | `/land help` | Display all available land commands |
 | `/land reload` | Reload plugin configuration |
 

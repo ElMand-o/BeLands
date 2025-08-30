@@ -45,7 +45,7 @@ public class BuyCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getUsage() {
-        return "/land buy";
+        return "/landbuy";
     }
 
     @Override
@@ -58,7 +58,7 @@ public class BuyCommand implements SubCommand, CommandExecutor {
         Location pos1 = startPCommand.getStartPosition(player);
         Location pos2 = endPCommand.getEndPosition(player);
         if (pos1 == null || pos2 == null) {
-             player.sendMessage(config.getMessage("messages.selection.too_small"));
+             player.sendMessage(config.getMessage("messages.selection.not_a_selection"));
              return;
         }
 

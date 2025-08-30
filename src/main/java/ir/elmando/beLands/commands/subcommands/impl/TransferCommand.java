@@ -28,7 +28,7 @@ public class TransferCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getName() {
-        return "transfer";
+        return "give";
     }
 
     @Override
@@ -38,18 +38,18 @@ public class TransferCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getUsage() {
-        return "/land transfer <player> <claim_id>";
+        return "/land give <claim_id> <player>";
     }
 
     @Override
     public List<String> getAliases() {
-        return List.of();
+        return List.of(new String[]{"transfer"});
     }
 
     @Override
     public void execute(Player player, String[] args) {
-        String target = ArgParser.getString(args, 0, null);
-        int claimId = ArgParser.getInt(args, 1, -1);
+        String target = ArgParser.getString(args, 1, null);
+        int claimId = ArgParser.getInt(args, 0, -1);
 
         if (target == null || claimId == -1) {
             player.sendMessage("§cUsage: " + getUsage());

@@ -9,11 +9,12 @@ import me.ryanhamshire.GriefPrevention.CreateClaimResult;
 import me.ryanhamshire.GriefPrevention.GriefPrevention;
 import me.ryanhamshire.GriefPrevention.util.BoundingBox;
 import net.milkbowl.vault.economy.Economy;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Random;
 import java.util.Vector;
 
@@ -91,10 +92,15 @@ public class LandManager {
         OfflinePlayer target = Bukkit.getOfflinePlayer(target_username);
         Claim claim = griefPrevention.dataStore.getClaim(claim_id);
         if (claim == null || !claim.getOwnerID().equals(owner.getUniqueId())) return false;
+        claim.managers.add(target.getUniqueId().toString());
 
         claim.setPermission(target.getUniqueId().toString(), ClaimPermission.Build);
         griefPrevention.dataStore.saveClaim(claim);
         return true;
+    }
+
+    public Collection<Claim> getAllClaims() {
+        return griefPrevention.dataStore.getClaims();
     }
 
     public boolean isTrusted(int claim_id, Player owner, String target_username) {
@@ -109,6 +115,7 @@ public class LandManager {
         OfflinePlayer target = Bukkit.getOfflinePlayer(target_username);
         Claim claim = griefPrevention.dataStore.getClaim(claim_id);
         if (claim == null || !claim.getOwnerID().equals(owner.getUniqueId())) return false;
+        claim.managers.remove(target.getUniqueId().toString());
 
         claim.setPermission(target.getUniqueId().toString(), null);
         griefPrevention.dataStore.saveClaim(claim);
@@ -118,6 +125,10 @@ public class LandManager {
     public Vector<Claim> getClaims(Player player) {
         return griefPrevention.dataStore.getPlayerData(player.getUniqueId()).getClaims();
     }
+
+//    public List<String> getAllTrustedUsers(int claim_id) {
+//        griefPrevention.dataStore.get
+//    }
 
     public Claim getClaim(int claim_id) {
         return griefPrevention.dataStore.getClaim(claim_id);
@@ -131,11 +142,105 @@ public class LandManager {
         Claim claim = griefPrevention.dataStore.getClaim(claim_id);
         if (claim == null) return;
 
+        // Calculate center coordinates
         double midX = (claim.getGreaterBoundaryCorner().getX() + claim.getLesserBoundaryCorner().getX()) / 2.0;
-        double midY = claim.getGreaterBoundaryCorner().getY() + 1;
         double midZ = (claim.getGreaterBoundaryCorner().getZ() + claim.getLesserBoundaryCorner().getZ()) / 2.0;
 
-        Location landLocation = new Location(claim.getGreaterBoundaryCorner().getWorld(), midX, midY, midZ);
-        player.teleport(landLocation);
+        World world = claim.getGreaterBoundaryCorner().getWorld();
+        Location safeLocation = findSafeLocation(world, midX, midZ);
+
+        if (safeLocation != null) {
+            player.teleport(safeLocation);
+        } else {
+            player.sendMessage("Could not find a safe teleport location in this claim.");
+        }
+    }
+
+    private Location findSafeLocation(World world, double x, double z) {
+        // Get the highest solid block at this location
+        int surfaceY = world.getHighestBlockYAt((int) x, (int) z);
+
+        // Check a few blocks around the surface level to find the best spot
+        for (int yOffset = 0; yOffset <= 3; yOffset++) {
+            int checkY = surfaceY + yOffset;
+
+            // Make sure we don't go above build height
+            if (checkY >= world.getMaxHeight() - 1) break;
+
+            Location checkLoc = new Location(world, x, checkY + 1, z);
+
+            if (isSafeLocation(checkLoc)) {
+                return checkLoc;
+            }
+        }
+
+        // If surface level doesn't work, try a spiral search nearby
+        for (int radius = 1; radius <= 5; radius++) {
+            for (int dx = -radius; dx <= radius; dx++) {
+                for (int dz = -radius; dz <= radius; dz++) {
+                    if (Math.abs(dx) != radius && Math.abs(dz) != radius) continue;
+
+                    double newX = x + dx;
+                    double newZ = z + dz;
+
+                    int newSurfaceY = world.getHighestBlockYAt((int) newX, (int) newZ);
+                    Location checkLoc = new Location(world, newX, newSurfaceY + 1, newZ);
+
+                    if (isSafeLocation(checkLoc)) {
+                        return checkLoc;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private boolean isSafeLocation(Location loc) {
+        World world = loc.getWorld();
+        int x = loc.getBlockX();
+        int y = loc.getBlockY();
+        int z = loc.getBlockZ();
+
+        // Check if the block below is solid (to stand on)
+        Block blockBelow = world.getBlockAt(x, y - 1, z);
+        if (!blockBelow.getType().isSolid()) {
+            return false;
+        }
+
+        // Check if the blocks at player level and above are passable
+        Block blockAtFeet = world.getBlockAt(x, y, z);
+        Block blockAtHead = world.getBlockAt(x, y + 1, z);
+
+        if (!isPassable(blockAtFeet) || !isPassable(blockAtHead)) {
+            return false;
+        }
+
+        // Avoid dangerous blocks
+        if (isDangerous(blockBelow) || isDangerous(blockAtFeet) || isDangerous(blockAtHead)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private boolean isPassable(Block block) {
+        Material type = block.getType();
+        return type.isAir() ||
+                !type.isSolid() ||
+                type == Material.WATER ||
+                type == Material.SHORT_GRASS ||
+                type == Material.TALL_GRASS ||
+                type == Material.FERN ||
+                type == Material.LARGE_FERN ||
+                type == Material.SNOW;
+    }
+
+    private boolean isDangerous(Block block) {
+        Material type = block.getType();
+        return type == Material.LAVA ||
+                type == Material.FIRE ||
+                type == Material.MAGMA_BLOCK ||
+                type == Material.CACTUS;
     }
 }

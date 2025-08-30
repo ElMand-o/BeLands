@@ -13,6 +13,14 @@ commands:
     usage: /land <subcommand>
     aliases: [lands, claim]
 
+  landbuy:
+    description: Buy land/claim command
+    usage: /landbuy
+
+  landsell:
+    description: Sell land/claim command
+    usage: /landsell <id/here>
+
   startp:
     description: Sets the first corner of your land
     usage: /startp
@@ -27,3 +35,8 @@ commands:
     description: Shows land command help
     usage: /land help
     aliases: [h]
+
+permissions:
+  lands.reload:
+    default: false
+    description: Allows user to reload the BeLands plugin

@@ -53,11 +53,17 @@ messages:
     min_size: "<red>Your claim is too small. Minimum land size is <yellow>{min_blocks}</yellow> blocks.</red>"
     max_size: "<red>Your claim is too big. Maximum land size is <yellow>{max_blocks}</yellow> blocks.</red>"
     overlap: "<red>Your claim overlaps with another land!</red>"
+    all_lands: |-
+      <yellow>All created lands in</yellow> <aqua><bold>EldenGames</bold></aqua>:
+      {claimIds}
     price: |-
       <green>Your land:</green>
       <green>ID</green>: <yellow>{claimId}</yellow>
       <green>Buy</green>: <yellow>${buy_price}</yellow>
       <green>Sell</green>: <yellow>${sell_price}</yellow>
+    trust_e: |-
+      <yellow>All trusted users in this claim</yellow>:
+      {trusted_users}
     none: "<red>You have zero lands... poor guy :(</red>"
 
     trust:
@@ -84,6 +90,7 @@ messages:
     first_position_set: "<green>First position set to</green> <gold>{pos}</gold>"
     second_position_set: "<green>Second position set to</green> <gold>{pos}</gold>"
     cleared: "<yellow>Selection cleared.</yellow>"
+    not_a_selection: "<red>Please select an area first.</red>"
     too_small: "<red>Your selection is too small. Minimum claim size: <yellow>{min}</yellow> blocks.</red>"
     too_large: "<red>Your selection is too large. Maximum claim size: <yellow>{max}</yellow> blocks.</red>"
     confirm: "<gold>Use <green>/land buy</green> to purchase this selection for <yellow>${price}</yellow> coins.</gold>"

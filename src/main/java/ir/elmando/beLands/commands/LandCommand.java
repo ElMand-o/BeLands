@@ -34,11 +34,11 @@ public class LandCommand implements CommandExecutor, TabCompleter {
         Player player = (Player) sender;
 
         // Case: command is /landbuy etc (direct alias)
-        if (label.toLowerCase().startsWith("land") && args.length == 0) {
+        if (label.toLowerCase().startsWith("land")) {
             String aliasSub = label.toLowerCase().substring("land".length());
             SubCommand sub = subCommands.get(aliasSub);
             if (sub != null) {
-                sub.execute(player, new String[0]);
+                sub.execute(player, args);
                 return true;
             }
         }

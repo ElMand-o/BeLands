@@ -13,9 +13,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class TrustCommand implements SubCommand, CommandExecutor {
     private final LandManager landManager;
@@ -28,7 +26,7 @@ public class TrustCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getName() {
-        return "trust";
+        return "invite";
     }
 
     @Override
@@ -38,18 +36,19 @@ public class TrustCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getUsage() {
-        return "/land trust <player> <claim_id>";
+        return "/land invite <claim_id> <player>";
     }
 
     @Override
     public List<String> getAliases() {
-        return List.of(new String[]{"access"});
+        return List.of(new String[]{"trust"});
     }
 
     @Override
     public void execute(Player player, String[] args) {
-        String target = ArgParser.getString(args, 0, null);
-        int claimId = ArgParser.getInt(args, 1, -1);
+        String target = ArgParser.getString(args, 1, null);
+        int claimId = ArgParser.getInt(args, 0, -1);
+//        String e = ArgParser.getString(args, 0, null);
 
         if (target == null || claimId == -1) {
             player.sendMessage("§cUsage: " + getUsage());
@@ -62,8 +61,28 @@ public class TrustCommand implements SubCommand, CommandExecutor {
             return;
         }
 
+
+
         if (!claim.ownerID.equals(player.getUniqueId())) {
             player.sendMessage(config.getMessage("messages.land.trust.not_owner"));
+            return;
+        }
+
+        if (target.equalsIgnoreCase("e")) {
+            List<String> trusted_users = new ArrayList<String>();
+
+            for (String manager : claim.managers) {
+                Player temp_player = Bukkit.getOfflinePlayer(UUID.fromString(manager)).getPlayer();
+
+                if (temp_player != null) {
+                    trusted_users.add(temp_player.getName());
+                }
+            }
+
+            Map<String, String> placeholders = new HashMap<>();
+            placeholders.put("trusted_users", String.join("<orange>,</orange> ", trusted_users));
+
+            player.sendMessage(config.getMessage("messages.land.trust_e", placeholders));
             return;
         }
 
@@ -75,7 +94,6 @@ public class TrustCommand implements SubCommand, CommandExecutor {
         }
 
         if (landManager.trustUser(claimId, player, target)) {
-
             Map<String, String> placeholders = new HashMap<>();
             placeholders.put("player", target);
             placeholders.put("claimId", String.valueOf(claimId));

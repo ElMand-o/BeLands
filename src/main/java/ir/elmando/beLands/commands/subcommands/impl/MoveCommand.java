@@ -55,7 +55,7 @@ public class MoveCommand implements SubCommand, CommandExecutor {
 
         Claim claim = landManager.getClaim(claimId);
         if (claim == null) {
-            player.sendMessage(config.getMessage("messages.land.overlap"));
+            player.sendMessage(config.getMessage("messages.land.no_info"));
             return;
         }
 

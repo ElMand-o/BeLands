@@ -41,7 +41,7 @@ public class SellCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getUsage() {
-        return "/land sell <land_id>";
+        return "/landsell <land_id/here>";
     }
 
     @Override
@@ -51,7 +51,15 @@ public class SellCommand implements SubCommand, CommandExecutor {
 
     @Override
     public void execute(Player player, String[] args) {
-        int claim_id = ArgParser.getInt(args, 0, -1);
+        long claim_id = ArgParser.getInt(args, 0, -1);
+        String text = ArgParser.getString(args, 0, null);
+
+        if (text != null && text.equalsIgnoreCase("here")) {
+            Claim temp_claim = landManager.getClaim(player.getLocation());
+            if (temp_claim != null)
+                claim_id = temp_claim.getID();
+        }
+
         if (claim_id == -1) {
             player.sendMessage("§cUsage: " + getUsage());
             return;

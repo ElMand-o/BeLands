@@ -27,7 +27,7 @@ public class UntrustCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getName() {
-        return "untrust";
+        return "kick";
     }
 
     @Override
@@ -37,18 +37,18 @@ public class UntrustCommand implements SubCommand, CommandExecutor {
 
     @Override
     public String getUsage() {
-        return "/land untrust <player> <claim_id>";
+        return "/land kick <claim_id> <player>";
     }
 
     @Override
     public List<String> getAliases() {
-        return List.of(new String[] {"remaccess"});
+        return List.of(new String[] {"untrust"});
     }
 
     @Override
     public void execute(Player player, String[] args) {
-        String target = ArgParser.getString(args, 0, null);
-        int claimId = ArgParser.getInt(args, 1, -1);
+        String target = ArgParser.getString(args, 1, null);
+        int claimId = ArgParser.getInt(args, 0, -1);
 
         if (target == null || claimId == -1) {
             player.sendMessage("§cUsage: " + getUsage());
